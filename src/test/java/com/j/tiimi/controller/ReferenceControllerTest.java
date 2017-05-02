@@ -174,6 +174,20 @@ public class ReferenceControllerTest {
             Assert.fail("Fail " + e);
         }
     }
+
+    @Test
+    public void deleteSuccessful() {
+        postSucceedsWithValidBookReference();
+
+        try {
+            mockMvc.perform(delete("/reference/1")
+                    .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk());
+        } catch (Exception e) {
+            Assert.fail("Fail " + e);
+        }
+    }
+
     public Reference generateBookReference(String... values) {
         List<Attribute> attributes = new ArrayList<>();
         attributes.add(new Attribute("author", values[0]));

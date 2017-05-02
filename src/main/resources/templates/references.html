@@ -37,7 +37,7 @@
 
     function renderResponse(response) {
         response.map(function (item) {
-            var id = _.escape(item.id);
+            var id = item.id;
             var type = _.escape(item.type);
             var identifier = _.escape(item.identifier);
 
@@ -55,6 +55,24 @@
 
                 $('#' + id).append(attributes);
             }));
+
+            $('#' + id).append('<button onclick="deleteReference(' + id + ')" class="btn btn-danger">Delete</button>')
+        });
+    }
+
+    function deleteReference(id) {
+        $.ajax({
+            type: 'DELETE',
+            url: '/reference/' + id,
+            success: function (data, text, request) {
+                var redirect = request.getResponseHeader('Redirect');
+                if (redirect) {
+                    window.location = redirect;
+                }
+            },
+            error: function (error) {
+                console.log(id);
+            }
         });
     }
 

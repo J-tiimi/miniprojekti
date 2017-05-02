@@ -89,6 +89,11 @@ public class ReferenceController {
         return ResponseEntity.ok(referenceService.createReference(reference));
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+         return referenceService.deleteReference(id);
+    }
+
 /*    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public Reference post(@RequestBody Reference reference) {
