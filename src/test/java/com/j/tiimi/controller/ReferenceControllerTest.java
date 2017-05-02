@@ -56,7 +56,7 @@ public class ReferenceControllerTest {
                 "", "Writing the worst os book ever", "Asdf", "1999", "identifaier"));
 
         articleJson = gson.toJson(generateArticleReference(
-                "asdfmies", "asdfhdsjkf", "fdf", "asdfasdf", "adsf", "asdf"));
+                "asdfmies", "asdfhdsjkf", "fdf", "asdfasdf", "1999", "asdf"));
         invalidArticleJson = gson.toJson(generateArticleReference(
                 "asdfmies", "asdfhdsjkf", "fdf", "", "", "asdf"));
 

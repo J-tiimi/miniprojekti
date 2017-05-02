@@ -76,13 +76,15 @@ public class ReferenceController {
         if (type != null && validators.containsKey(type.toLowerCase())) {
             validators.get(type.toLowerCase()).validate(reference, result);
         } else {
-            result.reject(type + " isn't a valid reference type.");
+            result.reject(null, type + " isn't a valid reference type.");
         }
+
         if (result.hasErrors()) {
             // tää on vaan esimerkki.
-            List<String> errors = result.getAllErrors()
+
+            List<String> errors = result.getGlobalErrors()
                     .stream()
-                    .map(e -> e.getCode())
+                    .map(e -> e.getDefaultMessage())
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }

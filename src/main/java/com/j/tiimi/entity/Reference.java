@@ -3,13 +3,12 @@ package com.j.tiimi.entity;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 @Entity
 public class Reference extends AbstractPersistable<Long> {
@@ -21,7 +20,8 @@ public class Reference extends AbstractPersistable<Long> {
     @NotBlank(message = "Type is required.")
     private String type;
 
-    @NotBlank(message = "Identifier can not be empty.")
+    @Column(unique = true)
+    @NotBlank
     private String identifier;
 
     public Reference() {

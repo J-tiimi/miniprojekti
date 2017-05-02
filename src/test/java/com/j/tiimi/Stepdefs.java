@@ -37,21 +37,21 @@ public class Stepdefs {
 	@Given("^book reference has been added to the system$")
 	public void book_reference_has_been_added_to_the_system() throws Throwable {
 		driver.get(baseUrl + "/book");
-		bookInput("asd", "asd", "asd", "asd", "asd");
+		bookInput("asd", "asd", "asd", "asd", "1999");
 		driver.get(baseUrl);
 	}
 
 	@Given("^article reference has been added to the system$")
 	public void article_reference_has_been_added_to_the_system() throws Throwable {
 		driver.get(baseUrl + "/article");
-		articleInput("asd", "asd", "asd", "asd", "asd", "asd");
+		articleInput("asd", "asd", "asd", "asd", "1999", "asd");
 		driver.get(baseUrl);
 	}
 
 	@Given("^inproceedings reference has been added to the system$")
 	public void inproceedings_reference_has_been_added_to_the_system() throws Throwable {
 		driver.get(baseUrl + "/inproceedings");
-		inproceedingsInput("asd", "asd", "asd", "asd", "asd");
+		inproceedingsInput("asd", "asd", "asd", "asd", "1999");
 		driver.get(baseUrl);
 	}
 

@@ -13,7 +13,7 @@ public class Attribute extends AbstractPersistable<Long> {
     @NotBlank
     private String key;
 
-    @NotBlank(message = "Value can not be empty.")
+    @NotBlank
     private String value;
 
     public Attribute(){}
