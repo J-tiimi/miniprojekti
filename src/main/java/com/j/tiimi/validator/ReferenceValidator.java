@@ -1,11 +1,14 @@
 package com.j.tiimi.validator;
 
+import com.j.tiimi.entity.Attribute;
 import com.j.tiimi.entity.Reference;
+import com.j.tiimi.repository.ReferenceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -16,6 +19,11 @@ public abstract class ReferenceValidator implements Validator {
     private Set<String> requiredKeys;
     private Set<String> optionalKeys;
     private Map<String, String> aliases;
+
+    private static final Set<String> integerFields = new HashSet<>(Arrays.asList(new String[] {
+            "YEAR",
+            "CHAPTER"
+    }));
 
     public Set<String> getRequiredKeys() {
         return requiredKeys;
@@ -41,6 +49,9 @@ public abstract class ReferenceValidator implements Validator {
         return aliases;
     }
 
+    @Autowired
+    private ReferenceRepository referenceRepository;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return Reference.class.equals(clazz);
@@ -49,35 +60,72 @@ public abstract class ReferenceValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Reference reference = (Reference) target;
+
+        if (reference.getIdentifier() == null || reference.getIdentifier().trim().isEmpty()) {
+            errors.reject(null, "Identifier can't be empty.");
+        }
+
+        if (!referenceRepository.findByIdentifier(reference.getIdentifier()).isEmpty()) {
+            errors.reject(null, "Identifier should be unique.");
+        }
+
         if (reference.getAttributes() == null) {
-            errors.reject(reference.getType() + " reference should have attributes.");
+            errors.reject(null,reference.getType() + " reference should have attributes.");
             return;
         }
 
-        Set<String> attributeKeys = reference
-                .getAttributes()
-                .stream()
+        validateAttributeKeys(reference.getAttributes(), errors);
+        validateAttributeValues(reference.getAttributes(), errors);
+
+    }
+
+    private void validateAttributeKeys(List<Attribute> attributes, Errors errors) {
+        Set<String> attributeKeys = attributes.stream()
                 .map(a -> {
                     if (aliases.containsKey(a.getKey().toUpperCase())) {
                         return aliases.get(a.getKey().toUpperCase());
                     }
                     return a.getKey().toUpperCase();
-                })
-                .collect(Collectors.toSet());
+                }).collect(Collectors.toSet());
 
-        for (String requiredKey : requiredKeys) {
+        requiredKeys.forEach(requiredKey -> {
             if (!attributeKeys.contains(requiredKey)) {
-                errors.reject("Field " + requiredKey + " is required.");
+                errors.reject(null,"Field " + requiredKey + " is required");
             }
-        }
+        });
 
         attributeKeys.removeAll(requiredKeys);
         attributeKeys.removeAll(optionalKeys);
+        attributeKeys.forEach(a -> errors.reject(null,a + " isn't a valid field."));
+    }
 
-        if (!attributeKeys.isEmpty()) {
-            for (String badKey : attributeKeys) {
-                errors.reject(badKey + " isn't a valid field.");
+    private void validateAttributeValues(List<Attribute> attributes, Errors errors) {
+        attributes.stream().forEach(a -> {
+            if (a.getValue() == null || a.getValue().trim().isEmpty()) {
+               errors.reject(null,a.getKey().toUpperCase() + " can't be empty.");
+            } else if (a.getValue().length() < 3) {
+                errors.reject(null, a.getKey() + " should be over 3 characters long.");
             }
+        });
+
+        List<Attribute> integerAttributes = attributes.stream().filter(a ->
+                        integerFields.contains(a.getKey().toUpperCase())
+                ).collect(Collectors.toList());
+
+        for (Attribute a : integerAttributes) {
+            if (!isInteger(a.getValue())) {
+                errors.reject(null, a.getKey() + " should be an integer.");
+            }
+        }
+
+    }
+
+    private boolean isInteger(String value) {
+        try {
+            Integer.parseUnsignedInt(value);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
         }
     }
 
