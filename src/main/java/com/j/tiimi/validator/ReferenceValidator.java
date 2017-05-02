@@ -103,6 +103,8 @@ public abstract class ReferenceValidator implements Validator {
         attributes.stream().forEach(a -> {
             if (a.getValue() == null || a.getValue().trim().isEmpty()) {
                errors.reject(null,a.getKey().toUpperCase() + " can't be empty.");
+            } else if (a.getValue().length() < 3) {
+                errors.reject(null, a.getKey() + " should be over 3 characters long.");
             }
         });
 
