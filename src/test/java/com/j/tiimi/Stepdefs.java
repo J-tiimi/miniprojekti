@@ -75,18 +75,18 @@ public class Stepdefs {
 		driver.get(baseUrl + "/list");
 	}
 
-    @Then("^reference is not saved and error message is shown$")
+    /*@Then("^reference is not saved and error message is shown$")
     public void reference_is_not_saved_and_error_message_is_shown() throws Throwable {
 		assertFalse(driver.getPageSource().contains("Book"));
 		assertFalse(driver.getPageSource().contains("Article"));
 		assertFalse(driver.getPageSource().contains("Inproceedings"));
-    }
+    }*/
 
-	@Then("^new reference is added to the system$")
+	/*@Then("^new reference is added to the system$")
 	public void new_reference_is_added_to_the_system() throws Throwable {
 		driver.get(baseUrl + "/list");
 		assertTrue(driver.getPageSource().contains("@"));
-	}
+	}*/
 
 	@Then("^that book reference is shown on the page$")
 	public void that_book_reference_is_shown_on_the_page() throws Throwable {
