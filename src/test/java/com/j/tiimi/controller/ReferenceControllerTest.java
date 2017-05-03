@@ -56,7 +56,7 @@ public class ReferenceControllerTest {
                 "", "Writing the worst os book ever", "Asdf", "1999", "identifaier"));
 
         articleJson = gson.toJson(generateArticleReference(
-                "asdfmies", "asdfhdsjkf", "fdf", "asdfasdf", "1999", "asdf"));
+                "asdfmies", "asdfhdsjkf", "asdfasdf", "1999", "asdfsdf", "uniikki"));
         invalidArticleJson = gson.toJson(generateArticleReference(
                 "asdfmies", "asdfhdsjkf", "fdf", "", "", "asdf"));
 
@@ -162,6 +162,7 @@ public class ReferenceControllerTest {
             Assert.fail("Fail " + e);
         }
     }
+
     @Test
     public void postFailsWithInvalidArticleReference() {
         try {
@@ -177,8 +178,6 @@ public class ReferenceControllerTest {
 
     @Test
     public void deleteSuccessful() {
-        postSucceedsWithValidBookReference();
-
         try {
             mockMvc.perform(delete("/reference/1")
                     .contentType(MediaType.APPLICATION_JSON))
