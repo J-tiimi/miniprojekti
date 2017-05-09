@@ -11,3 +11,5 @@ https://j-hipster.herokuapp.com/
 [Dokumentaatio](doc/dokumentit.md)
 
 [Hyväksymiskriteerit](doc/kriteerit.md)
+
+[Loppuraportti](doc/raportti.md)
